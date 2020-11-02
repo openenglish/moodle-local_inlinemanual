@@ -120,6 +120,17 @@ class inlinemanual {
 
         return $user->timecreated;
     }
+
+    public static function user_cohorts(){
+        global $USER, $DB;
+        $db_cohort = $DB->get_records_sql('SELECT h.name
+                    FROM {cohort} h
+                    JOIN {cohort_members} hm ON h.id = hm.cohortid
+                    JOIN {user} u ON hm.userid = u.id
+                    WHERE u.id=?', array($USER->id));
+        $cohort = json_encode(array_keys($db_cohort));
+        return $cohort;
+    }
     /**
      * Get the user role to record in tracking, taking account of masquerading if necessary.
      *
@@ -173,6 +184,12 @@ class inlinemanual {
             if ($user_full_name) {
                 $track[] = "'name' : '".$user_full_name."'";
             }
+
+            $user_cohorts = self::user_cohorts();
+            if ($user_cohorts) {
+                $track[] = "'cohorts' : ".$user_cohorts;
+            }
+
 
             if (get_config('local_inlinemanual', 'roletracking')) {
                 $user_roles = self::user_role();
