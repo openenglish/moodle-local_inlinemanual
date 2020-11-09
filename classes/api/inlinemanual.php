@@ -187,7 +187,7 @@ class inlinemanual {
 
             $user_cohorts = self::user_cohorts();
             if ($user_cohorts) {
-                $track[] = "'cohorts' : ".$user_cohorts;
+                $track[] = "'cohort' : ".$user_cohorts;
             }
 
 
